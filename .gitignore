@@ -2,3 +2,6 @@ venv/
 **/__pycache__
 db.sqlite3
 .env
+staticfiles/
+private_key.pem
+public_key.pem

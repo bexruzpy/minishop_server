@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-7tg_-qxnosxm*4p#+$*+62f4xd$zjx38odu99mc8&g$wsu64&j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
     'apis',
     'bot'
 ]
@@ -69,6 +71,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+ASGI_APPLICATION = 'config.asgi.application'
 
 
 # Database
@@ -110,15 +113,52 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# 1. Static URL - browserda qanday ko‘rinadi
+STATIC_URL = '/staticfiles/'
+
+# 3. Production uchun collectstatic yig‘adigan joy
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+
+
+# adminga yuborilishi kerak bo'lgan post formati
+SEND_ADMIN_POST = "Yangi foydalanuvchi\n\nIsm: <b><code>{name}</code></b>\nDo'kon haqida: {about_shop}\nTelefon raqami: {phone}\n\nDevice ID: <code>{device_id}</code>"
+
+SEND_ADMIN_MARKUP = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text="1 oyga aktivlashtirish", callback_data="activate_one_month")
+        ],
+        [
+            InlineKeyboardButton(text="📥 Key yaratish & yuklash", callback_data="download_key_file")
+        ],
+        [
+            InlineKeyboardButton(text="❌ Yopish", callback_data="close")
+        ]
+    ]
+)
+
+
+PROJECT_NAME = "Minishop Desktop"
+ADMIN_TELEGRAM_ID = 5139310978
+
